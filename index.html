@@ -46,11 +46,19 @@
   background:#c3c3c3;
 }
 
-h1{
-    font-size:1.2em;
+.h1{
+    font-size:clamp(4em,12vw,18em);
     text-align:center;
+    margin-top:-10px;
     font-family:"Renner",sans-serif;
     font-weight:400;
+}
+.h2{
+    font-size:clamp(2em,5vw,10em);
+    margin-bottom:-20px;
+    text-align:center;
+    font-family:"Renner",sans-serif;
+    font-weight:700;
 }
 </style>
 </head>
@@ -61,14 +69,12 @@ h1{
   <div class="menu" id="menu">
     <a href="#">ホーム</a>
     <a href="#">サービス</a>
-    <a href="#">ブログ</a>
+    
     <a href="#">お問い合わせ</a>
   </div>
 </nav>
-<div style="text-align:center">
-    <img src="CNAZN.svg" height="100">
-</div>
 
-<h1>NAZNオペレーティング・システム開発系コミュニティ</h1>
+<div class="h2">独自を創り出せ</div>
+<h1 class="h1">BE CREATE IT</h1>
 </body>
 </html>
