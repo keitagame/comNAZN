@@ -12,6 +12,7 @@
  
 }
  body{
+    background:black;
   margin:0;
  
 }
@@ -21,7 +22,7 @@
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:#ffffff;
+  
   padding:12px 20px;
 }
 
@@ -34,7 +35,7 @@
 }
 
 .menu a{
-  color:rgb(0, 0, 0);
+  color:rgb(255, 255, 255);
   text-decoration:none;
   font-size:14px;
   padding:6px 10px;
@@ -47,34 +48,43 @@
 }
 
 .h1{
-    font-size:clamp(4em,12vw,18em);
+margin-bottom:0px;
+
+margin-top:auto;
+color:white;
+    font-size:clamp(4em,17vw,25em);
     text-align:center;
-    margin-top:-10px;
+   
     font-family:"Renner",sans-serif;
     font-weight:400;
 }
-.h2{
-    font-size:clamp(2em,5vw,10em);
-    margin-bottom:-20px;
-    text-align:center;
-    font-family:"Renner",sans-serif;
-    font-weight:700;
+
+.hero{
+ display: flex;
+  flex-direction: column; /* 子要素を縦に並べる */
+background-image: url("https://img.wallpaper.sc/desktop/images/5k/desktop-pc-5120x2880-wallpaper_00081.jpg");
+  /* 表示を整えるための追加設定 */
+  background-size: cover;      /* 画像を枠いっぱいに広げる */
+  background-position: center; /* 画像を中央に配置 */
+height:100vh;
 }
 </style>
 </head>
 <body>
+<div class="hero">
 <nav class="navbar">
    
-    <a style="color:rgb(0, 0, 0)">NAZN</a>
+    <a style="color:rgb(255, 255, 255)">NAZN</a>
   <div class="menu" id="menu">
     <a href="#">ホーム</a>
-    <a href="#">サービス</a>
+    <a href="#">プロジェクト</a>
     
-    <a href="#">お問い合わせ</a>
+    <a href="#">コミュニティ</a>
   </div>
 </nav>
 
-<div class="h2">独自を創り出せ</div>
+
 <h1 class="h1">BE CREATE IT</h1>
+</div>
 </body>
 </html>
