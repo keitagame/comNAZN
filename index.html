@@ -3,88 +3,747 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAZN オペレーティング・システム開発系コミュニティ</title>
+<title>NAZN オペレーティングシステム開発系コミュニティ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-     @font-face {
-  font-family: "Renner";
-  src: url("./Renner.ttf") format("truetype");
-  font-display: swap;
- 
-}
- body{
-    background:black;
-  margin:0;
- 
-}
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ナビバー */
-.navbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  
-  padding:12px 20px;
-}
+  :root {
+    --green: #ffffff;
+    --black: #000;
+    --white: #fff;
+  }
 
+  html { scroll-behavior: smooth; }
 
+  body {
+    background: var(--green);
+    color: var(--black);
+    font-family: 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-/* メニュー */
-.menu{
-  display:flex;
-  gap:20px;
-}
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 16px; height: 16px;
+    background: var(--black);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor.big { width: 48px; height: 48px; background: var(--black); opacity: 0.3; }
 
-.menu a{
-  color:rgb(255, 255, 255);
-  text-decoration:none;
-  font-size:14px;
-  padding:6px 10px;
-  border-radius:4px;
-  transition:0.2s;
-}
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: var(--green);
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  header.scrolled { border-bottom-color: var(--black); }
 
-.menu a:hover{
-  background:#c3c3c3;
-}
+  .logo {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -1px;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: var(--black);
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    border: 3px solid var(--black);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900;
+  }
 
-.h1{
-margin-bottom:0px;
+  nav { display: flex; align-items: center; gap: 24px; }
+  nav a {
+    font-size: 13px; font-weight: 700;
+    text-decoration: none; color: var(--black);
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+  nav a:hover { opacity: 0.5; }
 
-margin-top:auto;
-color:white;
-    font-size:clamp(4em,17vw,25em);
-    text-align:center;
-   
-    font-family:"Renner",sans-serif;
-    font-weight:400;
-}
+  .btn {
+    padding: 10px 20px;
+    font-size: 13px; font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.15s, color 0.15s;
+    cursor: none;
+    border: 2px solid var(--black);
+  }
+  .btn-black { background: var(--black); color: var(--green); }
+  .btn-black:hover { background: var(--green); color: var(--black); }
+  .btn-outline { background: transparent; color: var(--black); }
+  .btn-outline:hover { background: var(--black); color: var(--green); }
 
-.hero{
- display: flex;
-  flex-direction: column; /* 子要素を縦に並べる */
-background-image: url("https://img.wallpaper.sc/desktop/images/5k/desktop-pc-5120x2880-wallpaper_00081.jpg");
-  /* 表示を整えるための追加設定 */
-  background-size: cover;      /* 画像を枠いっぱいに広げる */
-  background-position: center; /* 画像を中央に配置 */
-height:100vh;
-}
+  .menu-icon { font-size: 22px; font-weight: 900; cursor: none; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 0 0 0;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+  }
+
+  .hero-tagline {
+    position: relative; z-index: 2;
+    background: var(--black);
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 40px;
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    margin: 0 0 -10px 0;
+    width: fit-content;
+  }
+  .hero-tagline span { margin-right: 24px; }
+
+  .hero-3rd {
+    position: absolute;
+    top: 120px; right: 40px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+  }
+
+  .hero-title {
+    margin-top:40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 20vw, 280px);
+    line-height: 0.85;
+    letter-spacing: -2px;
+    color: var(--black);
+    position: relative; z-index: 1;
+    user-select: none;
+    padding: 0 20px;
+    overflow: hidden;
+  }
+
+  .hero-title .line {
+    display: block;
+    transform: translateY(110%);
+    animation: slideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hero-title .line:nth-child(1) { animation-delay: 0.1s; }
+  .hero-title .line:nth-child(2) { animation-delay: 0.2s; }
+
+  @keyframes slideUp {
+    to { transform: translateY(0); }
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 0;
+    padding: 40px 20px 60px;
+    position: relative; z-index: 2;
+  }
+  .hero-cta .btn {
+    padding: 20px 36px;
+    font-size: 15px;
+    border: 2px solid var(--black);
+  }
+  .hero-cta .btn-black { margin-right: 2px; }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--black);
+    padding: 16px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    padding: 0 40px;
+    display: inline-flex; align-items: center; gap: 20px;
+  }
+  .marquee-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SERVICES */
+  .section {
+    padding: 120px 40px;
+  }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 40px; height: 2px;
+    background: var(--black);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -1px;
+    margin-bottom: 60px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .service-card {
+    background: var(--black);
+    color: var(--green);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .service-card:hover { background: #111; }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    opacity: 0.15;
+    margin-bottom: 20px;
+  }
+  .service-name {
+    font-size: 22px; font-weight: 900;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .service-desc {
+    font-size: 13px; font-weight: 400;
+    line-height: 1.8;
+    opacity: 0.8;
+  }
+
+  /* STATS */
+  .stats-section {
+    background: var(--black);
+    padding: 100px 40px;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+  .stat-item {
+    padding: 48px 40px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 7vw, 100px);
+    line-height: 1;
+    color: var(--green);
+    letter-spacing: -2px;
+  }
+  .stat-unit {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--green);
+    opacity: 0.6;
+  }
+  .stat-label {
+    font-size: 12px; font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.15em;
+    margin-top: 8px;
+  }
+
+  /* CASES */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+  .case-card {
+    background: var(--black);
+    color: var(--green);
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .case-card:hover { transform: scale(0.99); }
+  .case-tag {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em;
+    border: 1px solid var(--green);
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 24px;
+    opacity: 0.7;
+  }
+  .case-title { font-size: 28px; font-weight: 900; margin-bottom: 12px; line-height: 1.4; }
+  .case-result {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--green);
+    line-height: 1;
+    margin-top: 32px;
+  }
+  .case-result-label { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--black);
+    padding: 120px 40px;
+    text-align: center;
+  }
+  .cta-section .section-title { color: var(--green); }
+  .cta-section p { color: rgba(255, 255, 255, 0.7); font-size: 16px; line-height: 1.8; max-width: 560px; margin: 0 auto 48px; }
+  .cta-btns { display: flex; gap: 8px; justify-content: center; }
+  .cta-btns .btn { padding: 20px 48px; font-size: 15px; }
+  .btn-green { background: var(--green); color: var(--black); border: 2px solid var(--green); }
+  .btn-green:hover { background: transparent; color: var(--green); }
+
+  /* SEMINAR */
+  .seminar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+  .seminar-card {
+    border: 2px solid var(--black);
+    padding: 40px;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+  }
+  .seminar-card:hover { background: var(--black); color: var(--green); }
+  .seminar-date { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 16px; opacity: 0.6; }
+  .seminar-title { font-size: 18px; font-weight: 900; line-height: 1.4; margin-bottom: 20px; }
+  .seminar-free {
+    display: inline-block;
+    background: var(--black);
+    color: var(--green);
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px;
+    letter-spacing: 0.1em;
+  }
+  .seminar-card:hover .seminar-free { background: var(--green); color: var(--black); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    color: var(--green);
+    padding: 80px 40px 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 40px;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--green); margin-bottom: 16px; }
+  .footer-tagline { font-size: 13px; opacity: 0.6; line-height: 1.8; }
+  .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; margin-bottom: 20px; opacity: 0.4; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 13px; text-decoration: none; color: rgba(255, 255, 255, 0.7); transition: color 0.2s; }
+  .footer-links a:hover { color: var(--green); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 11px; opacity: 0.4; }
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    transform: translateY(-100%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: opacity 0.2s;
+  }
+  .mobile-menu a:hover { opacity: 0.5; }
+  .mobile-menu-close {
+    position: absolute;
+    top: 24px; right: 40px;
+    font-size: 32px;
+    color: var(--green);
+    cursor: none;
+    font-weight: 900;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .services-grid, .stats-grid, .seminar-grid { grid-template-columns: 1fr; }
+    .cases-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+    .hero-title { font-size: clamp(80px, 22vw, 150px); }
+  }
 </style>
 </head>
 <body>
-<div class="hero">
-<nav class="navbar">
-   
-    <a style="color:rgb(255, 255, 255)">NAZN</a>
-  <div class="menu" id="menu">
-    <a href="#">ホーム</a>
-    <a href="#">プロジェクト</a>
-    
-    <a href="#">コミュニティ</a>
-  </div>
-</nav>
 
+<div class="cursor" id="cursor"></div>
 
-<h1 class="h1">BE CREATE IT</h1>
+<!-- HEADER -->
+<header id="header">
+  <a href="#" class="logo">
+    <div class="logo-icon">^o^</div>
+    NAZN
+  </a>
+  <nav>
+    <a href="#top">トップ</a>
+    <a href="#services">サービス</a>
+    <a href="#cases">メンバー</a>
+    <a href="#seminar">アカウント</a>
+    <a href="#">ツール</a>
+    <a href="#">リンク</a>
+    <a href="#">新着情報</a>
+    <a href="#" class="btn btn-black">仲間になろう</a>
+    <a href="#" class="btn btn-outline">お問い合わせ</a>
+     <div class="menu-icon" id="menuBtn">☰</div>
+  </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="mobile-menu-close" id="menuClose">✕</span>
+  <a href="#top">トップ</a>
+  <a href="#services">サービス</a>
+  <a href="#cases">導入事例</a>
+  <a href="#seminar">セミナー</a>
+  <a href="#">資料</a>
+  <a href="#">コラム</a>
 </div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-3rd">WE ARE<br>A DEVELOPER</div>
+  <div class="hero-tagline reveal">
+    <span>全ては私達が作る。</span>
+    依存関係ZEROを目指し日々開発に励む。
+  </div>
+  <div class="hero-title">
+    <span class="line">NAZN</span>
+    <span class="line">EXEC</span>
+  </div>
+  <div class="hero-cta reveal">
+    <a href="#" class="btn btn-black">⭐️ 私達は誰だ</a>
+    <a href="#" class="btn btn-outline">📡 最新情報</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">BE CREATE IT<span class="marquee-dot"></span></span>
+    <span class="marquee-item">私達が創ります<span class="marquee-dot"></span></span>
+    <span class="marquee-item">DATA DRIVEN<span class="marquee-dot"></span></span>
+    <span class="marquee-item">ゲームから言語まで<span class="marquee-dot"></span></span>
+    <span class="marquee-item">BE FRANK<span class="marquee-dot"></span></span>
+    <span class="marquee-item">創作に自由を<span class="marquee-dot"></span></span>
+   <span class="marquee-item">BE CREATE IT<span class="marquee-dot"></span></span>
+    <span class="marquee-item">私達が創ります<span class="marquee-dot"></span></span>
+    <span class="marquee-item">DATA DRIVEN<span class="marquee-dot"></span></span>
+    <span class="marquee-item">ゲームから言語まで<span class="marquee-dot"></span></span>
+    <span class="marquee-item">BE FRANK<span class="marquee-dot"></span></span>
+    <span class="marquee-item">創作に自由を<span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-label">SERVICES</div>
+  <div class="section-title">サービス</div>
+  <p style="font-size:16px; line-height:1.9; max-width:640px; font-weight:500;">
+    AIと人の知見を融合させた第3の広告代理店。<br>
+    最適な戦略を、最強のクリエイティブで、最速で提供します。
+  </p>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-name">AIデジタル広告<br>運用</div>
+      <div class="service-desc">独自AIが広告データを瞬時に分析。最適な入札戦略・ターゲティングをリアルタイムで実行し、ROASを最大化します。</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-name">クリエイティブ<br>制作・最適化</div>
+      <div class="service-desc">AIがパフォーマンスを予測しながらクリエイティブを生成。高速PDCAで常に最強の広告素材を維持します。</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-name">動画広告<br>プロダクション</div>
+      <div class="service-desc">TV CMからSNS動画まで。戦略立案からデータ分析まで一気通貫で対応し、成果にコミットします。</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-name">マーケティング<br>戦略コンサルティング</div>
+      <div class="service-desc">AI解析による市場インサイトと豊富な実績データを基に、御社に最適なマーケティング戦略を設計します。</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-name">データ分析・<br>レポーティング</div>
+      <div class="service-desc">広告効果の可視化から競合分析まで。独自ダッシュボードで意思決定をスピードアップします。</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <div class="service-name">SNSマーケティング<br>支援</div>
+      <div class="service-desc">X、Instagram、TikTok、YouTubeなど各プラットフォームに最適化したコンテンツ戦略と運用を提供します。</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="section-label" style="color:rgba(0,255,65,0.5)"><span style="background:rgba(0,255,65,0.2); width:40px; height:2px; display:block;"></span>NUMBERS</div>
+  <div class="section-title" style="color:var(--green)">実績数字</div>
+  <div class="stats-grid reveal">
+    <div class="stat-item">
+      <div class="stat-num">3,000<span class="stat-unit">+</span></div>
+      <div class="stat-label">累計支援社数</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98<span class="stat-unit">%</span></div>
+      <div class="stat-label">顧客継続率</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">150<span class="stat-unit">億</span></div>
+      <div class="stat-label">年間広告運用額</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2.4<span class="stat-unit">倍</span></div>
+      <div class="stat-label">平均ROAS改善率</div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section class="section" id="cases">
+  <div class="section-label">CASE STUDIES</div>
+  <div class="section-title">導入事例</div>
+  <div class="cases-grid reveal">
+    <div class="case-card">
+      <div class="case-tag">EC / D2C</div>
+      <div class="case-title">化粧品D2Cブランドの<br>広告ROASを大幅改善</div>
+      <div class="case-result">ROAS +340%</div>
+      <div class="case-result-label">導入後6ヶ月での成果</div>
+    </div>
+    <div class="case-card">
+      <div class="case-tag">SaaS / B2B</div>
+      <div class="case-title">BtoBサービスの<br>リード獲得コストを削減</div>
+      <div class="case-result">CPL -62%</div>
+      <div class="case-result-label">AIターゲティング最適化</div>
+    </div>
+    <div class="case-card">
+      <div class="case-tag">フィンテック</div>
+      <div class="case-title">金融アプリの<br>新規獲得数を大幅拡大</div>
+      <div class="case-result">CVR +185%</div>
+      <div class="case-result-label">クリエイティブ最適化</div>
+    </div>
+    <div class="case-card">
+      <div class="case-tag">人材 / HR</div>
+      <div class="case-title">求人媒体の<br>応募単価を大幅改善</div>
+      <div class="case-result">CPA -45%</div>
+      <div class="case-result-label">動画広告×AIの掛け合わせ</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEMINAR -->
+<section class="section" id="seminar" style="background: var(--black); color: var(--green);">
+  <div class="section-label" style="color:rgba(0,255,65,0.5)">SEMINAR</div>
+  <div class="section-title" style="color:var(--green)">セミナー</div>
+  <div class="seminar-grid reveal">
+    <div class="seminar-card" style="border-color: rgba(0,255,65,0.3); color: var(--green);">
+      <div class="seminar-date">2026.03.05 (水) 14:00〜</div>
+      <div class="seminar-title">AI広告の最新トレンド2026：<br>今すぐ使えるROAS改善術</div>
+      <span class="seminar-free">無料参加</span>
+    </div>
+    <div class="seminar-card" style="border-color: rgba(0,255,65,0.3); color: var(--green);">
+      <div class="seminar-date">2026.03.12 (水) 15:00〜</div>
+      <div class="seminar-title">D2C企業のための<br>SNS広告戦略完全ガイド</div>
+      <span class="seminar-free">無料参加</span>
+    </div>
+    <div class="seminar-card" style="border-color: rgba(0,255,65,0.3); color: var(--green);">
+      <div class="seminar-date">2026.03.19 (水) 13:00〜</div>
+      <div class="seminar-title">動画クリエイティブで<br>CVRを倍増させる方法論</div>
+      <span class="seminar-free">無料参加</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="justify-content:center; color:rgba(0,255,65,0.5)">GET STARTED</div>
+  <div class="section-title">まず、AIに<br>提案させてください。</div>
+  <p>貴社の課題に対して、AIが最速で最適な提案を作成します。<br>コンペへのご参加もお気軽にどうぞ。</p>
+  <div class="cta-btns">
+    <a href="#" class="btn btn-green">👆 AI最速提案を受ける</a>
+    <a href="#" class="btn" style="border-color:rgba(0,255,65,0.4); color:rgba(0,255,65,0.7)">👆 コンペに呼ぶ</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">NOVASELL</div>
+      <div class="footer-tagline">最適も、最強も、最速で。<br>AIエージェンシー、ノバセル。<br><br>〒150-0001 東京都渋谷区神宮前X-XX-XX</div>
+    </div>
+    <div>
+      <div class="footer-col-title">SERVICES</div>
+      <ul class="footer-links">
+        <li><a href="#">AIデジタル広告運用</a></li>
+        <li><a href="#">クリエイティブ制作</a></li>
+        <li><a href="#">動画広告制作</a></li>
+        <li><a href="#">戦略コンサルティング</a></li>
+        <li><a href="#">データ分析</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">COMPANY</div>
+      <ul class="footer-links">
+        <li><a href="#">会社概要</a></li>
+        <li><a href="#">導入事例</a></li>
+        <li><a href="#">セミナー</a></li>
+        <li><a href="#">コラム</a></li>
+        <li><a href="#">採用情報</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">CONTACT</div>
+      <ul class="footer-links">
+        <li><a href="#">お問い合わせ</a></li>
+        <li><a href="#">資料請求</a></li>
+        <li><a href="#">コンペ参加</a></li>
+        <li><a href="#">プライバシーポリシー</a></li>
+        <li><a href="#">利用規約</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Novasell Inc. All rights reserved.</div>
+    <div style="display:flex; gap:20px;">
+      <a href="#" style="color:rgba(0,255,65,0.5); font-size:11px; text-decoration:none;">X (Twitter)</a>
+      <a href="#" style="color:rgba(0,255,65,0.5); font-size:11px; text-decoration:none;">Instagram</a>
+      <a href="#" style="color:rgba(0,255,65,0.5); font-size:11px; text-decoration:none;">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .btn, [class*="card"]').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  // HEADER SCROLL
+  window.addEventListener('scroll', () => {
+    document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // MOBILE MENU
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.add('open');
+  });
+  document.getElementById('menuClose').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
 </body>
 </html>
